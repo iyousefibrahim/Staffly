@@ -9,9 +9,9 @@ using Staffly.DAL.Models;
 
 namespace Staffly.BLL.Repositories
 {
-    public class DepartmentRepository : GenericRepository<Department>, IDepartmentRepository
+    public class EmployeeRepository : GenericRepository<Employee>, IEmployeeRepository
     {
-        public DepartmentRepository(StafflyDbContext context) : base(context)
+        public EmployeeRepository(StafflyDbContext context) : base(context)
         {
         }
     }

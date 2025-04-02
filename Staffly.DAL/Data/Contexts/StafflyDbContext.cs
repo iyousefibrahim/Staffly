@@ -16,5 +16,6 @@ namespace Staffly.DAL.Data.Contexts
             
         }
         public DbSet<Department> Departments { get; set; }
+        public DbSet<Employee> Employees { get; set; }
     }
 }

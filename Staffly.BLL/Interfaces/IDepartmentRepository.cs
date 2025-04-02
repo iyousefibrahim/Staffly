@@ -7,7 +7,7 @@ using Staffly.DAL.Models;
 
 namespace Staffly.BLL.Interfaces
 {
-    public interface IDepartmentRepository
+    public interface IDepartmentRepository : IGenericRepository<Department>
     {
         IEnumerable<Department> GetAll();
 
