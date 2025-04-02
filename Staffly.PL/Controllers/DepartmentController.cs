@@ -108,5 +108,18 @@ namespace Staffly.PL.Controllers
             }
             return View(departmentDto);
         }
+
+        [HttpPost]
+        public IActionResult Delete(int id)
+        {
+            var department = _departmentRepository.GetById(id);
+            if (department is null)
+            {
+                return NotFound(new { statusCode = 404, message = $"Department With Id:{id} Is Not Found!" });
+            }
+            _departmentRepository.Delete(department);
+            return RedirectToAction("Index");
+        }
+
     }
 }
