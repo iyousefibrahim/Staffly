@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Staffly.DAL\Staffly.DAL.csproj" />
+  </ItemGroup>
+
 </Project>
