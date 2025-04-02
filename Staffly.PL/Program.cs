@@ -1,7 +1,18 @@
+using Microsoft.EntityFrameworkCore;
+using Staffly.BLL.Interfaces;
+using Staffly.BLL.Repositories;
+using Staffly.DAL.Data.Contexts;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+builder.Services.AddDbContext<StafflyDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 var app = builder.Build();
 

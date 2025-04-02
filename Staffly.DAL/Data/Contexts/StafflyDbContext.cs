@@ -10,9 +10,10 @@ namespace Staffly.DAL.Data.Contexts
 {
     public class StafflyDbContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+
+        public StafflyDbContext(DbContextOptions<StafflyDbContext> contextOptions):base(contextOptions) 
         {
-            optionsBuilder.UseSqlServer("Server=.;Database=Staffly;Trusted_Connection=True;TrustServerCertificate=True");
+            
         }
         public DbSet<Department> Departments { get; set; }
     }

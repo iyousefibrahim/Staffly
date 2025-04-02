@@ -12,9 +12,9 @@ namespace Staffly.BLL.Repositories
     public class DepartmentRepository : IDepartmentRepository
     {
         private readonly StafflyDbContext _context;
-        public DepartmentRepository()
+        public DepartmentRepository(StafflyDbContext context)
         {
-            _context = new StafflyDbContext();
+            _context = context;
         }
 
         public IEnumerable<Department> GetAll()
