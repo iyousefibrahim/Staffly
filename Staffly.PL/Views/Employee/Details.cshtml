@@ -1,0 +1,75 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "Details";
+}
+<br />
+<br />
+<h1>Details Page</h1>
+<br />
+<br />
+
+<form asp-action="Details">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Name</label>
+        <input readonly asp-for="Name" type="text" class="form-control" id="Name">
+        <span class="text-danger" asp-validation-for="Name"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Age" class="form-label">Age</label>
+        <input readonly asp-for="Age" type="number" class="form-control" id="Age">
+        <span class="text-danger" asp-validation-for="Age"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input readonly asp-for="Email" type="email" class="form-control" id="Email">
+        <span class="text-danger" asp-validation-for="Email"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Address" class="form-label">Address</label>
+        <input readonly asp-for="Address" type="text" class="form-control" id="Address">
+        <span class="text-danger" asp-validation-for="Address"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Phone" class="form-label">Phone</label>
+        <input readonly asp-for="Phone" type="text" class="form-control" id="Phone">
+        <span class="text-danger" asp-validation-for="Phone"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Salary" class="form-label">Salary</label>
+        <input readonly asp-for="Salary" type="text" class="form-control" id="Salary">
+        <span class="text-danger" asp-validation-for="Salary"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="isActive" class="form-label">Active</label>
+        <input readonly asp-for="isActive" type="checkbox" class="form-check-input">
+        <span class="text-danger" asp-validation-for="isActive"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="isDeleted" class="form-label">Deleted</label>
+        <input readonly asp-for="isDeleted" type="checkbox" class="form-check-input">
+        <span class="text-danger" asp-validation-for="isDeleted"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="HiringDate" class="form-label">Hiring Date</label>
+        <input readonly asp-for="HiringDate" type="date" class="form-control" id="HiringDate">
+        <span class="text-danger" asp-validation-for="HiringDate"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="CreateAt" class="form-label">Creation Date</label>
+        <input readonly asp-for="CreateAt" type="date" class="form-control" id="CreateAt">
+        <span class="text-danger" asp-validation-for="CreateAt"></span>
+    </div>
+
+    <a asp-action="Update" asp-controller="Employee" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" asp-controller="Employee" class="btn btn-outline-primary">Back</a>
+</form>
+
