@@ -2,7 +2,8 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+<br />
+<br />
 <h1>All Departments</h1>
 <br />
 <br />
@@ -29,10 +30,10 @@
                     <td>@item.Name</td>
                     <td>@item.CreateAt</td>
                     <td>
-                        <a asp-action="Details"><button class="btn btn-warning">Details</button></a>
+                        <a asp-action="Details" asp-route-id="@item.Id"><button class="btn btn-warning">Details</button></a>
                     </td>
                     <td>
-                        <a asp-action="Update"><button class="btn btn-success">Update</button></a>
+                        <a asp-action="Update" asp-route-id="@item.Id"><button class="btn btn-success">Update</button></a>
                     </td>
                     <td>
                         <a asp-action="Delete"><button class="btn btn-danger">Delete</button></a>
