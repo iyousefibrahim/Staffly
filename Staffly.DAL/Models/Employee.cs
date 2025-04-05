@@ -18,5 +18,7 @@ namespace Staffly.DAL.Models
         public bool isDeleted { get; set; }
         public DateTime HiringDate { get; set; }
         public DateTime CreateAt { get; set; }
+        public int? DepartmentId { get; set; }
+        public Department Department { get; set; }
     }
 }

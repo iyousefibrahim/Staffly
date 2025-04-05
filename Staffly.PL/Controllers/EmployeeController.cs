@@ -8,9 +8,12 @@ namespace Staffly.PL.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        private readonly IDepartmentRepository _departmentRepository;
+
+        public EmployeeController(IEmployeeRepository employeeRepository,IDepartmentRepository departmentRepository)
         {
             _employeeRepository = employeeRepository;
+            this._departmentRepository = departmentRepository;
         }
 
         [HttpGet]
@@ -23,6 +26,8 @@ namespace Staffly.PL.Controllers
         [HttpGet]
         public IActionResult Create()
         {
+            var departments = _departmentRepository.GetAll();
+            ViewData["Departments"] = departments;
             return View();
         }
 
@@ -43,7 +48,8 @@ namespace Staffly.PL.Controllers
                     isActive = employeeDto.isActive,
                     isDeleted = employeeDto.isDeleted,
                     HiringDate = employeeDto.HiringDate,
-                    CreateAt = employeeDto.CreateAt
+                    CreateAt = employeeDto.CreateAt,
+                    DepartmentId = employeeDto.DepartmentId
                 };
 
                 _employeeRepository.Add(employee);
@@ -67,6 +73,8 @@ namespace Staffly.PL.Controllers
             {
                 return NotFound(new { statusCode = 404, message = $"Employee With Id:{id.Value} Is Not Found!" });
             }
+            var departments = _departmentRepository.GetAll();
+            ViewData["Departments"] = departments;
 
             return View(employee);
         }
@@ -100,6 +108,9 @@ namespace Staffly.PL.Controllers
                 CreateAt = employee.CreateAt
             };
 
+            var departments = _departmentRepository.GetAll();
+            ViewData["Departments"] = departments;
+
             return View(employeeDto);
         }
         [HttpPost]
@@ -121,7 +132,8 @@ namespace Staffly.PL.Controllers
                     isActive = employeeDto.isActive,
                     isDeleted = employeeDto.isDeleted,
                     HiringDate = employeeDto.HiringDate,
-                    CreateAt = employeeDto.CreateAt
+                    CreateAt = employeeDto.CreateAt,
+                    DepartmentId = employeeDto.DepartmentId
                 };
 
                 _employeeRepository.Update(employee);

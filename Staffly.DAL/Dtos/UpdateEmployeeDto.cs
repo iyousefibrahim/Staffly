@@ -39,5 +39,8 @@ namespace Staffly.DAL.Dtos
 
         [Required(ErrorMessage = "Creation Date is required.")]
         public DateTime CreateAt { get; set; }
+        [Required(ErrorMessage = "Department ID is required.")]
+        [Range(1, int.MaxValue, ErrorMessage = "Invalid Department ID.")]
+        public int DepartmentId { get; set; }
     }
 }

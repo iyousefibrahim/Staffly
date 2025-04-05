@@ -1,6 +1,7 @@
 ﻿@model CreateEmployeeDto
 @{
     ViewData["Title"] = "Create";
+    var departments = new SelectList(ViewData["Departments"] as List<Department>,"Id","Name");
 }
 <br />
 <br />
@@ -66,6 +67,14 @@
         <label asp-for="isDeleted" class="form-label">Deleted</label>
         <input asp-for="isDeleted" type="checkbox" class="form-check-input">
         <span class="text-danger" asp-validation-for="isDeleted"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DepartmentId" class="form-label">Department</label>
+        <select asp-for="DepartmentId" asp-items="departments">
+			<option value="@null">-- Select Department --</option>
+        </select>
+        <span class="text-danger" asp-validation-for="DepartmentId"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Create</button>

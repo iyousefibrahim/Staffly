@@ -24,6 +24,7 @@
                 <th>isDeleted</th>
                 <th>@Html.DisplayNameFor(E => E.HiringDate)</th>
                 <th>@Html.DisplayNameFor(E => E.CreateAt)</th>
+                <th>Department</th>
                 <th>Details</th>
                 <th>Update</th>
                 <th>Delete</th>
@@ -43,6 +44,7 @@
 					<td>@item.isDeleted</td>
 					<td>@item.HiringDate</td>
 					<td>@item.CreateAt</td>
+                    <td>@item.Department.Name</td>
                     <td>
                         <a asp-action="Details" asp-route-id="@item.Id"><button class="btn btn-warning">Details</button></a>
                     </td>

@@ -1,6 +1,7 @@
 ﻿@model UpdateEmployeeDto
 @{
     ViewData["Title"] = "Update";
+    var departments = new SelectList(ViewData["Departments"] as List<Department>, "Id", "Name");
 }
 <br />
 <br />
@@ -66,6 +67,14 @@
         <label asp-for="CreateAt" class="form-label">Creation Date</label>
         <input asp-for="CreateAt" type="date" class="form-control" id="CreateAt">
         <span class="text-danger" asp-validation-for="CreateAt"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="DepartmentId" class="form-label">Department</label>
+        <select asp-for="DepartmentId" asp-items="departments">
+            <option value="@null">-- Select Department --</option>
+        </select>
+        <span class="text-danger" asp-validation-for="DepartmentId"></span>
     </div>
 
     <button type="submit" class="btn btn-success">Save</button>
