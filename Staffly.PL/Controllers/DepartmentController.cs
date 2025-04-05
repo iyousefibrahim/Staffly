@@ -38,6 +38,8 @@ namespace Staffly.PL.Controllers
                 // Mapping CreateDepartmentDto to Department
                 var department = _mapper.Map<Department>(departmentDto);
                 _unitOfWork.DepartmentRepository.Add(department);
+                // Save changes to the database
+                _unitOfWork.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -88,6 +90,8 @@ namespace Staffly.PL.Controllers
             {
                 var department = _mapper.Map<Department>(departmentDto);
                 _unitOfWork.DepartmentRepository.Update(department);
+                // Save changes to the database
+                _unitOfWork.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(departmentDto);
@@ -102,6 +106,8 @@ namespace Staffly.PL.Controllers
                 return NotFound(new { statusCode = 404, message = $"Department With Id:{id} Is Not Found!" });
             }
             _unitOfWork.DepartmentRepository.Delete(department);
+            // Save changes to the database
+            _unitOfWork.SaveChanges();
             return RedirectToAction("Index");
         }
 

@@ -10,5 +10,7 @@ namespace Staffly.BLL.Interfaces
     {
         public IEmployeeRepository EmployeeRepository { get; }
         public IDepartmentRepository DepartmentRepository { get; }
+
+        public void SaveChanges();
     }
 }

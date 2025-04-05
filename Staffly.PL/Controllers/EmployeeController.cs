@@ -48,6 +48,8 @@ namespace Staffly.PL.Controllers
                 // Map DTO to Entity
                 var employee = _mapper.Map<Employee>(employeeDto);
                 _unitOfWork.EmployeeRepository.Add(employee);
+                // Save changes to the database
+                _unitOfWork.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -104,6 +106,8 @@ namespace Staffly.PL.Controllers
                  var employee = _mapper.Map<Employee>(employeeDto);
 
                 _unitOfWork.EmployeeRepository.Update(employee);
+                // Save changes to the database
+                _unitOfWork.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(employeeDto);
@@ -118,6 +122,8 @@ namespace Staffly.PL.Controllers
                 return NotFound(new { statusCode = 404, message = $"Employee With Id:{id} Is Not Found!" });
             }
             _unitOfWork.EmployeeRepository.Delete(employee);
+            // Save changes to the database
+            _unitOfWork.SaveChanges();
             return RedirectToAction("Index");
         }
     }
