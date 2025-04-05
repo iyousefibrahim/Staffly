@@ -9,14 +9,6 @@ namespace Staffly.BLL.Interfaces
 {
     public interface IEmployeeRepository : IGenericRepository<Employee>
     {
-        IEnumerable<Employee> GetAll();
-
-        Employee GetById(int id);
-
-        int Add(Employee Employee);
-
-        int Update(Employee Employee);
-
-        int Delete(Employee Employee);
+        List<Employee> FindByName(string name);
     }
 }

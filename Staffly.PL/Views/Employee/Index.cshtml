@@ -4,8 +4,16 @@
 }
 <br />
 <br />
-<h1>All Employees</h1>
+
+<form>
+    <div class="input-group mb-3">
+        <input type="text" name="SearchInput" class="form-control" placeholder="Search By Name" aria-label="Search By Name" aria-describedby="button-addon2">
+        <button class="btn btn-success" type="submit" id="button-addon2">Search</button>
+    </div>
+</form>
+
 <br />
+<h1>All Employees</h1>
 <br />
 <a asp-action="Create" asp-controller="Employee"><button class="btn btn-primary">Create Employee</button></a>
 
