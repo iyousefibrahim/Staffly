@@ -24,7 +24,7 @@
         <input readonly asp-for="CreateAt" class="form-control" id="Date">
         <span class="text-danger" asp-validation-for="CreateAt"></span>
     </div>
-    <button asp-action="Update" asp-controller="Department" type="submit" class="btn btn-warning">Edit</button>
+    <a asp-action="Update" asp-controller="Department" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
     <a asp-action="Index" asp-controller="Department" class="btn btn-outline-primary">Back</a>
 </form>
 

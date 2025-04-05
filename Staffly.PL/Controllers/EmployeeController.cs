@@ -8,15 +8,13 @@ namespace Staffly.PL.Controllers
 {
     public class EmployeeController : Controller
     {
-        private readonly IEmployeeRepository _employeeRepository;
-        private readonly IDepartmentRepository _departmentRepository;
         private readonly IMapper _mapper;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public EmployeeController(IEmployeeRepository employeeRepository,IDepartmentRepository departmentRepository,IMapper mapper)
+        public EmployeeController(IMapper mapper,IUnitOfWork unitOfWork)
         {
-            _employeeRepository = employeeRepository;
-            this._departmentRepository = departmentRepository;
             this._mapper = mapper;
+            this._unitOfWork = unitOfWork;
         }
 
         [HttpGet]
@@ -25,11 +23,11 @@ namespace Staffly.PL.Controllers
             IEnumerable<Employee> employees;
             if (string.IsNullOrEmpty(SearchInput))
             {
-                employees = _employeeRepository.GetAll();
+                employees = _unitOfWork.EmployeeRepository.GetAll();
             }
             else
             {
-                employees = _employeeRepository.FindByName(SearchInput);
+                employees = _unitOfWork.EmployeeRepository.FindByName(SearchInput);
             }
             return View(employees);
         }
@@ -37,7 +35,7 @@ namespace Staffly.PL.Controllers
         [HttpGet]
         public IActionResult Create()
         {
-            var departments = _departmentRepository.GetAll();
+            var departments = _unitOfWork.DepartmentRepository.GetAll();
             ViewData["Departments"] = departments;
             return View();
         }
@@ -49,7 +47,7 @@ namespace Staffly.PL.Controllers
             {
                 // Map DTO to Entity
                 var employee = _mapper.Map<Employee>(employeeDto);
-                _employeeRepository.Add(employee);
+                _unitOfWork.EmployeeRepository.Add(employee);
                 return RedirectToAction("Index");
             }
 
@@ -64,13 +62,13 @@ namespace Staffly.PL.Controllers
                 return BadRequest("Invalid Id!");
             }
 
-            var employee = _employeeRepository.GetById(id.Value);
+            var employee = _unitOfWork.EmployeeRepository.GetById(id.Value);
 
             if (employee is null)
             {
                 return NotFound(new { statusCode = 404, message = $"Employee With Id:{id.Value} Is Not Found!" });
             }
-            var departments = _departmentRepository.GetAll();
+            var departments = _unitOfWork.DepartmentRepository.GetAll();
             ViewData["Departments"] = departments;
 
             return View(employee);
@@ -84,14 +82,14 @@ namespace Staffly.PL.Controllers
                 return BadRequest("Invalid Id!");
             }
 
-            var employee = _employeeRepository.GetById(id.Value);
+            var employee = _unitOfWork.EmployeeRepository.GetById(id.Value);
 
             if (employee is null)
             {
                 return NotFound(new { statusCode = 404, message = $"Employee With Id:{id.Value} Is Not Found!" });
             }
             var employeeDto = _mapper.Map<UpdateEmployeeDto>(employee);
-            var departments = _departmentRepository.GetAll();
+            var departments = _unitOfWork.DepartmentRepository.GetAll();
             ViewData["Departments"] = departments;
 
             return View(employeeDto);
@@ -105,7 +103,7 @@ namespace Staffly.PL.Controllers
                 // Map DTO to Entity
                  var employee = _mapper.Map<Employee>(employeeDto);
 
-                _employeeRepository.Update(employee);
+                _unitOfWork.EmployeeRepository.Update(employee);
                 return RedirectToAction("Index");
             }
             return View(employeeDto);
@@ -114,12 +112,12 @@ namespace Staffly.PL.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var employee = _employeeRepository.GetById(id);
+            var employee = _unitOfWork.EmployeeRepository.GetById(id);
             if (employee is null)
             {
                 return NotFound(new { statusCode = 404, message = $"Employee With Id:{id} Is Not Found!" });
             }
-            _employeeRepository.Delete(employee);
+            _unitOfWork.EmployeeRepository.Delete(employee);
             return RedirectToAction("Index");
         }
     }

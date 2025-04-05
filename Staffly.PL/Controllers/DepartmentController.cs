@@ -8,19 +8,19 @@ namespace Staffly.PL.Controllers
 {
     public class DepartmentController : Controller
     {
-        private readonly IDepartmentRepository _departmentRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
 
-        public DepartmentController(IDepartmentRepository departmentRepository,IMapper mapper)
+        public DepartmentController(IUnitOfWork unitOfWork,IMapper mapper)
         {
-            _departmentRepository = departmentRepository;
+            this._unitOfWork = unitOfWork;
             this._mapper = mapper;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            var departments = _departmentRepository.GetAll();
+            var departments = _unitOfWork.DepartmentRepository.GetAll();
             return View(departments);
         }
 
@@ -37,7 +37,7 @@ namespace Staffly.PL.Controllers
             {
                 // Mapping CreateDepartmentDto to Department
                 var department = _mapper.Map<Department>(departmentDto);
-                _departmentRepository.Add(department);
+                _unitOfWork.DepartmentRepository.Add(department);
                 return RedirectToAction("Index");
             }
 
@@ -52,7 +52,7 @@ namespace Staffly.PL.Controllers
                 return BadRequest("Invalid Id!");
             }
 
-            var department = _departmentRepository.GetById(id.Value);
+            var department = _unitOfWork.DepartmentRepository.GetById(id.Value);
 
             if(department is null)
             {
@@ -70,20 +70,14 @@ namespace Staffly.PL.Controllers
                 return BadRequest("Invalid Id!");
             }
 
-            var department = _departmentRepository.GetById(id.Value);
+            var department = _unitOfWork.DepartmentRepository.GetById(id.Value);
 
             if (department is null)
             {
                 return NotFound(new { statusCode = 404, message = $"Department With Id:{id.Value} Is Not Found!" });
             }
 
-            var departmentDto = new UpdateDepartmentDto
-            {
-                Code = department.Code,
-                Name = department.Name,
-                CreateAt = department.CreateAt
-            };
-
+            var departmentDto = _mapper.Map<UpdateDepartmentDto>(department);
             return View(departmentDto);
         }
         [HttpPost]
@@ -93,7 +87,7 @@ namespace Staffly.PL.Controllers
             if (ModelState.IsValid)
             {
                 var department = _mapper.Map<Department>(departmentDto);
-                _departmentRepository.Update(department);
+                _unitOfWork.DepartmentRepository.Update(department);
                 return RedirectToAction("Index");
             }
             return View(departmentDto);
@@ -102,12 +96,12 @@ namespace Staffly.PL.Controllers
         [HttpPost]
         public IActionResult Delete(int id)
         {
-            var department = _departmentRepository.GetById(id);
+            var department = _unitOfWork.DepartmentRepository.GetById(id);
             if (department is null)
             {
                 return NotFound(new { statusCode = 404, message = $"Department With Id:{id} Is Not Found!" });
             }
-            _departmentRepository.Delete(department);
+            _unitOfWork.DepartmentRepository.Delete(department);
             return RedirectToAction("Index");
         }
 
