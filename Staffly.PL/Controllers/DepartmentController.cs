@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Staffly.BLL.Interfaces;
 using Staffly.DAL.Dtos;
 using Staffly.DAL.Models;
@@ -8,9 +9,12 @@ namespace Staffly.PL.Controllers
     public class DepartmentController : Controller
     {
         private readonly IDepartmentRepository _departmentRepository;
-        public DepartmentController(IDepartmentRepository departmentRepository)
+        private readonly IMapper _mapper;
+
+        public DepartmentController(IDepartmentRepository departmentRepository,IMapper mapper)
         {
             _departmentRepository = departmentRepository;
+            this._mapper = mapper;
         }
 
         [HttpGet]
@@ -32,13 +36,7 @@ namespace Staffly.PL.Controllers
             if (ModelState.IsValid)
             {
                 // Mapping CreateDepartmentDto to Department
-                var department = new Department
-                {
-                    Code = departmentDto.Code,
-                    Name = departmentDto.Name,
-                    CreateAt = departmentDto.CreateAt
-                };
-
+                var department = _mapper.Map<Department>(departmentDto);
                 _departmentRepository.Add(department);
                 return RedirectToAction("Index");
             }
@@ -94,15 +92,7 @@ namespace Staffly.PL.Controllers
         {
             if (ModelState.IsValid)
             {
-
-                var department = new Department
-                {
-                    Id = id,
-                    Code = departmentDto.Code,
-                    Name = departmentDto.Name,
-                    CreateAt = departmentDto.CreateAt
-                };
-
+                var department = _mapper.Map<Department>(departmentDto);
                 _departmentRepository.Update(department);
                 return RedirectToAction("Index");
             }
