@@ -9,6 +9,6 @@ namespace Staffly.BLL.Interfaces
 {
     public interface IEmployeeRepository : IGenericRepository<Employee>
     {
-        List<Employee> FindByName(string name);
+        Task<List<Employee>> FindByNameAsync(string name);
     }
 }

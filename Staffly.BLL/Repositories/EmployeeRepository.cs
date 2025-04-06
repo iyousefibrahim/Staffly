@@ -19,11 +19,11 @@ namespace Staffly.BLL.Repositories
             this._context = context;
         }
 
-        public List<Employee> FindByName(string name)
+        public async Task<List<Employee>> FindByNameAsync(string name)
         {
-            return _context.Employees
+            return await _context.Employees
                 .Include(E => E.Department)
-                .Where(E => E.Name.ToLower().Contains(name.ToLower())).ToList();
+                .Where(E => E.Name.ToLower().Contains(name.ToLower())).ToListAsync();
         }
     }
 }

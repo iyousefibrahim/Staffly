@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Staffly.BLL.Interfaces;
 using Staffly.DAL.Dtos;
@@ -18,38 +19,38 @@ namespace Staffly.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index(string? SearchInput)
+        public async Task<IActionResult> Index(string? SearchInput)
         {
             IEnumerable<Employee> employees;
             if (string.IsNullOrEmpty(SearchInput))
             {
-                employees = _unitOfWork.EmployeeRepository.GetAll();
+                employees = await _unitOfWork.EmployeeRepository.GetAllAsync();
             }
             else
             {
-                employees = _unitOfWork.EmployeeRepository.FindByName(SearchInput);
+                employees = await _unitOfWork.EmployeeRepository.FindByNameAsync(SearchInput);
             }
             return View(employees);
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var departments = _unitOfWork.DepartmentRepository.GetAll();
+            var departments =await _unitOfWork.DepartmentRepository.GetAllAsync();
             ViewData["Departments"] = departments;
             return View();
         }
 
         [HttpPost]
-        public IActionResult Create(CreateEmployeeDto employeeDto)
+        public async Task<IActionResult> Create(CreateEmployeeDto employeeDto)
         {
             if (ModelState.IsValid)
             {
                 // Map DTO to Entity
                 var employee = _mapper.Map<Employee>(employeeDto);
-                _unitOfWork.EmployeeRepository.Add(employee);
+                await _unitOfWork.EmployeeRepository.AddAsync(employee);
                 // Save changes to the database
-                _unitOfWork.SaveChanges();
+                await _unitOfWork.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -57,48 +58,48 @@ namespace Staffly.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (id is null)
             {
                 return BadRequest("Invalid Id!");
             }
 
-            var employee = _unitOfWork.EmployeeRepository.GetById(id.Value);
+            var employee = await _unitOfWork.EmployeeRepository.GetByIdAsync(id.Value);
 
             if (employee is null)
             {
                 return NotFound(new { statusCode = 404, message = $"Employee With Id:{id.Value} Is Not Found!" });
             }
-            var departments = _unitOfWork.DepartmentRepository.GetAll();
+            var departments = await _unitOfWork.DepartmentRepository.GetAllAsync();
             ViewData["Departments"] = departments;
 
             return View(employee);
         }
 
         [HttpGet]
-        public IActionResult Update(int? id)
+        public async Task<IActionResult> Update(int? id)
         {
             if (id is null)
             {
                 return BadRequest("Invalid Id!");
             }
 
-            var employee = _unitOfWork.EmployeeRepository.GetById(id.Value);
+            var employee = await _unitOfWork.EmployeeRepository.GetByIdAsync(id.Value);
 
             if (employee is null)
             {
                 return NotFound(new { statusCode = 404, message = $"Employee With Id:{id.Value} Is Not Found!" });
             }
             var employeeDto = _mapper.Map<UpdateEmployeeDto>(employee);
-            var departments = _unitOfWork.DepartmentRepository.GetAll();
+            var departments = await _unitOfWork.DepartmentRepository.GetAllAsync();
             ViewData["Departments"] = departments;
 
             return View(employeeDto);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update([FromRoute] int id, UpdateEmployeeDto employeeDto)
+        public async Task<IActionResult> Update([FromRoute] int id, UpdateEmployeeDto employeeDto)
         {
             if (ModelState.IsValid)
             {
@@ -107,23 +108,23 @@ namespace Staffly.PL.Controllers
 
                 _unitOfWork.EmployeeRepository.Update(employee);
                 // Save changes to the database
-                _unitOfWork.SaveChanges();
+                await _unitOfWork.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(employeeDto);
         }
 
         [HttpPost]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var employee = _unitOfWork.EmployeeRepository.GetById(id);
+            var employee = await _unitOfWork.EmployeeRepository.GetByIdAsync(id);
             if (employee is null)
             {
                 return NotFound(new { statusCode = 404, message = $"Employee With Id:{id} Is Not Found!" });
             }
             _unitOfWork.EmployeeRepository.Delete(employee);
             // Save changes to the database
-            _unitOfWork.SaveChanges();
+            await _unitOfWork.SaveChangesAsync();
             return RedirectToAction("Index");
         }
     }

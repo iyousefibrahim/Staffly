@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Staffly.BLL.Interfaces;
 using Staffly.DAL.Dtos;
@@ -18,9 +19,9 @@ namespace Staffly.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var departments = _unitOfWork.DepartmentRepository.GetAll();
+            var departments = await _unitOfWork.DepartmentRepository.GetAllAsync();
             return View(departments);
         }
 
@@ -31,15 +32,15 @@ namespace Staffly.PL.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateDepartmentDto departmentDto)
+        public async Task<IActionResult> Create(CreateDepartmentDto departmentDto)
         {
             if (ModelState.IsValid)
             {
                 // Mapping CreateDepartmentDto to Department
                 var department = _mapper.Map<Department>(departmentDto);
-                _unitOfWork.DepartmentRepository.Add(department);
+                await _unitOfWork.DepartmentRepository.AddAsync(department);
                 // Save changes to the database
-                _unitOfWork.SaveChanges();
+                await _unitOfWork.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
@@ -47,14 +48,14 @@ namespace Staffly.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if(id is null)
             {
                 return BadRequest("Invalid Id!");
             }
 
-            var department = _unitOfWork.DepartmentRepository.GetById(id.Value);
+            var department = await _unitOfWork.DepartmentRepository.GetByIdAsync(id.Value);
 
             if(department is null)
             {
@@ -65,14 +66,14 @@ namespace Staffly.PL.Controllers
         }
 
         [HttpGet]
-        public IActionResult Update(int? id)
+        public async Task<IActionResult> Update(int? id)
         {
             if (id is null)
             {
                 return BadRequest("Invalid Id!");
             }
 
-            var department = _unitOfWork.DepartmentRepository.GetById(id.Value);
+            var department = await _unitOfWork.DepartmentRepository.GetByIdAsync(id.Value);
 
             if (department is null)
             {
@@ -84,30 +85,30 @@ namespace Staffly.PL.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update([FromRoute]int id,UpdateDepartmentDto departmentDto)
+        public async Task<IActionResult> Update([FromRoute]int id,UpdateDepartmentDto departmentDto)
         {
             if (ModelState.IsValid)
             {
                 var department = _mapper.Map<Department>(departmentDto);
                 _unitOfWork.DepartmentRepository.Update(department);
                 // Save changes to the database
-                _unitOfWork.SaveChanges();
+                await _unitOfWork.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             return View(departmentDto);
         }
 
         [HttpPost]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var department = _unitOfWork.DepartmentRepository.GetById(id);
+            var department = await _unitOfWork.DepartmentRepository.GetByIdAsync(id);
             if (department is null)
             {
                 return NotFound(new { statusCode = 404, message = $"Department With Id:{id} Is Not Found!" });
             }
             _unitOfWork.DepartmentRepository.Delete(department);
             // Save changes to the database
-            _unitOfWork.SaveChanges();
+            await _unitOfWork.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

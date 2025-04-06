@@ -22,13 +22,13 @@ namespace Staffly.BLL.Repositories
 
         public IDepartmentRepository DepartmentRepository { get; }
 
-        public void SaveChanges()
+        public async Task SaveChangesAsync()
         {
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
-        public void Dispose()
+        public async ValueTask DisposeAsync()
         {
-            _context.Dispose();
+            await _context.DisposeAsync();
         }
     }
 }

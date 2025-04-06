@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace Staffly.BLL.Interfaces
 {
-    public interface IUnitOfWork : IDisposable
+    public interface IUnitOfWork : IAsyncDisposable
     {
         public IEmployeeRepository EmployeeRepository { get; }
         public IDepartmentRepository DepartmentRepository { get; }
 
-        public void SaveChanges();
+        public Task SaveChangesAsync();
     }
 }
