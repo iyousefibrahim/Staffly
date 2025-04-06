@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Staffly.BLL.Interfaces;
 using Staffly.BLL.Repositories;
@@ -17,6 +18,20 @@ builder.Services.AddDbContext<StafflyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<StafflyDbContext>();
+
+builder.Services.ConfigureApplicationCookie(
+    config =>
+    {
+        config.LoginPath = "/Auth/SignIn";
+        config.LogoutPath = "/Auth/SignOut";
+        config.AccessDeniedPath = "/Auth/AccessDenied";
+        config.SlidingExpiration = true;
+        config.ExpireTimeSpan = TimeSpan.FromDays(30);
+    }
+);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -32,6 +47,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
 using Staffly.DAL.Dtos;
 using Staffly.DAL.Models;
 
@@ -13,6 +14,9 @@ namespace Staffly.PL.Mapping
 
             CreateMap<CreateDepartmentDto,Department>().ReverseMap();
             CreateMap<UpdateDepartmentDto, Department>().ReverseMap();
+
+            CreateMap<SignUpDto, ApplicationUser>().ReverseMap();
+            CreateMap<SignInDto, ApplicationUser>().ReverseMap();
         }
     }
 }

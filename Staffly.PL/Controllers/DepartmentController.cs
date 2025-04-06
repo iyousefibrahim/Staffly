@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Staffly.BLL.Interfaces;
 using Staffly.DAL.Dtos;
@@ -7,6 +8,7 @@ using Staffly.DAL.Models;
 
 namespace Staffly.PL.Controllers
 {
+    [Authorize]
     public class DepartmentController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

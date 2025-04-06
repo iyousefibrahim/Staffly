@@ -1,0 +1,49 @@
+﻿@model SignUpDto
+
+@{
+    ViewData["Title"] = "SignUp";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
+}
+
+<div class="main-agileinfo">
+    <div class="agileits-top">
+        <form asp-action="SignUp" method="post">
+            <input class="text" asp-for="UserName" placeholder="Username" required="" />
+            <span asp-validation-for="UserName" class="text-danger"></span>
+
+            <input class="text" asp-for="FirstName" placeholder="First Name" required="" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+
+            <input class="text" asp-for="LastName" placeholder="Last Name" required="" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+
+            <input class="text email" asp-for="Email" placeholder="Email" required="" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+
+            <input class="text" asp-for="Password" placeholder="Password" required="" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+
+            <input class="text w3lpass" asp-for="ConfirmPassword" placeholder="Confirm Password" required="" />
+            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+
+            <div class="wthree-text">
+                <label class="anim">
+                    <input asp-for="IsAgree" type="checkbox" class="checkbox" required="" />
+                    <span>I Agree To The Terms & Conditions</span>
+                </label>
+                <span asp-validation-for="IsAgree" class="text-danger"></span>
+                <div class="clear"> </div>
+            </div>
+
+            <input type="submit" value="SIGNUP" />
+        </form>
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <p>Already have an Account? <a asp-action="SignIn">SignIn Now!</a></p>
+    </div>
+</div>
+
+@section ValidationSection
+{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}
