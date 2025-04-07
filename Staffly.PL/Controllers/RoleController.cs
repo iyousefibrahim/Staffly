@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +12,13 @@ namespace Staffly.PL.Controllers
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IMapper _mapper;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public RoleController(RoleManager<IdentityRole> roleManager, IMapper mapper)
+        public RoleController(RoleManager<IdentityRole> roleManager, IMapper mapper, UserManager<ApplicationUser> userManager)
         {
             this._roleManager = roleManager;
             this._mapper = mapper;
+            this._userManager = userManager;
         }
         [HttpGet]
         public async Task<IActionResult> Index(string? SearchInput)
@@ -58,10 +61,11 @@ namespace Staffly.PL.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            var roles = await _roleManager.Roles.ToListAsync();
-            ViewData["Roles"] = roles;
-            return View();
+            var roleDto = new RoleToRetrurnDto();
+            ViewData["Roles"] = await _roleManager.Roles.ToListAsync();
+            return View(roleDto);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Create(RoleToRetrurnDto roleDto)
@@ -151,5 +155,64 @@ namespace Staffly.PL.Controllers
             await _roleManager.DeleteAsync(role);
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> AddOrRemoveUser(string roleId)
+        {
+            var roles = await _roleManager.FindByIdAsync(roleId);
+            if (roles == null)
+                return NotFound();
+
+            var usersInRole = new List<UsersInRoleDto>();
+            var users = await _userManager.Users.ToListAsync();
+            foreach (var user in users)
+            {
+                var userInRole = new UsersInRoleDto()
+                {
+                    UserId = user.Id,
+                    UserName = user.UserName,
+                    IsSelected = await _userManager.IsInRoleAsync(user, roles.Name)
+                };
+                usersInRole.Add(userInRole);
+            }
+
+            ViewData["RoleId"] = roleId;
+            return View(usersInRole);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddOrRemoveUser(string roleId, List<UsersInRoleDto> users)
+        {
+            var role = await _roleManager.FindByIdAsync(roleId);
+            if (role == null)
+                return NotFound();
+
+            if (ModelState.IsValid)
+            {
+                foreach (var user in users)
+                {
+                    var userInDb = await _userManager.FindByIdAsync(user.UserId);
+                    if (userInDb != null)
+                    {
+                        if (user.IsSelected && !await _userManager.IsInRoleAsync(userInDb, role.Name))
+                        {
+                            await _userManager.AddToRoleAsync(userInDb, role.Name);
+                        }
+                        else if (!user.IsSelected && await _userManager.IsInRoleAsync(userInDb, role.Name))
+                        {
+                            await _userManager.RemoveFromRoleAsync(userInDb, role.Name);
+                        }
+                    }
+                }
+                return RedirectToAction("Update", "Role", new { id = roleId });
+            }
+
+            ViewData["RoleId"] = roleId;
+            return View(users);  // إعادة إرسال البيانات بعد التحديث
+        }
+
+
     }
+
+
 }

@@ -1,6 +1,7 @@
 ﻿@model RoleToRetrurnDto
 @{
     ViewData["Title"] = "Update Role";
+    var roleId = ViewData["RoleId"] as string;
 }
 <br />
 <br />
@@ -13,6 +14,8 @@
         <input asp-for="Name" type="text" class="form-control" id="Name">
         <span class="text-danger" asp-validation-for="Name"></span>
     </div>
+
+    <a asp-action="AddOrRemoveUser" asp-controller="Role" asp-route-roleId="@Model.Id" class="btn btn-outline-warning">Add Or Remove Role</a>
 
     <button type="submit" class="btn btn-success">Save</button>
     <a asp-action="Index" class="btn btn-outline-primary">Back</a>
