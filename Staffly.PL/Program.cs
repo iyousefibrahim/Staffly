@@ -19,7 +19,8 @@ builder.Services.AddDbContext<StafflyDbContext>(options =>
 });
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<StafflyDbContext>();
+    .AddEntityFrameworkStores<StafflyDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.ConfigureApplicationCookie(
     config =>

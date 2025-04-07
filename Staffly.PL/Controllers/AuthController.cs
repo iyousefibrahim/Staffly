@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Staffly.DAL.Dtos;
+using Staffly.PL.Helpers;
 
 namespace Staffly.PL.Controllers
 {
@@ -97,5 +98,86 @@ namespace Staffly.PL.Controllers
             await _signInManager.SignOutAsync();
             return RedirectToAction("SignIn", "Auth");
         }
+
+        [HttpGet]
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordDto forgetPasswordDto)
+        {
+            if (ModelState.IsValid) {
+
+                var user = await _userManager.FindByEmailAsync(forgetPasswordDto.Email);
+                if (user is not null)
+                {
+                    // Generate Token
+                    var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+                    // Create URL
+                    var URL = Url.Action("ResetPassword", "Auth", new { email = forgetPasswordDto.Email, token }, Request.Scheme);
+
+                    // Send Email
+                    var flag = EmailSettings.SendEmail(new Email
+                    {
+                        To = forgetPasswordDto.Email,
+                        Subject = "Forget Password",
+                        Body = URL
+                    });
+
+                    if (flag)
+                    {
+                        return RedirectToAction("CheckYourInbox", "Auth");
+                    }
+
+                }
+                ModelState.AddModelError("", "Invalid Email!");
+            }
+
+            return View(forgetPasswordDto);
+        }
+
+        [HttpGet]
+        public IActionResult CheckYourInbox()
+        {
+            return View();
+        }
+        [HttpGet]
+        public IActionResult ResetPassword(string email,string token)
+        {
+            TempData["email"] = email;
+            TempData["token"] = token;
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDto resetPasswordDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var email = TempData["email"]?.ToString();
+                var token = TempData["token"]?.ToString();
+                if (email is not null && token is not null)
+                {
+                    var user = await _userManager.FindByEmailAsync(email);
+                    if (user is not null)
+                    {
+                        var result = await _userManager.ResetPasswordAsync(user, token, resetPasswordDto.NewPassword);
+                        if (result.Succeeded)
+                        {
+                            return RedirectToAction("SignIn", "Auth");
+                        }
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError("", error.Description);
+                        }
+                    }
+                }
+            }
+            
+            return View(resetPasswordDto);
+        }
+
     }
 }
