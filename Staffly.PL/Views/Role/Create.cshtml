@@ -1,0 +1,25 @@
+﻿@model RoleToRetrurnDto
+@{
+    ViewData["Title"] = "Create Role";
+}
+<br />
+<br />
+<h1>Create Role</h1>
+<br />
+<br />
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Role Name</label>
+        <input asp-for="Name" type="text" class="form-control" id="Name">
+        <span class="text-danger" asp-validation-for="Name"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-outline-primary">Back</a>
+</form>
+
+@section ValidationSection
+{
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+}

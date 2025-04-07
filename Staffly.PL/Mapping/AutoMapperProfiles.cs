@@ -17,6 +17,11 @@ namespace Staffly.PL.Mapping
 
             CreateMap<SignUpDto, ApplicationUser>().ReverseMap();
             CreateMap<SignInDto, ApplicationUser>().ReverseMap();
+
+            CreateMap<UpdateUserDto, ApplicationUser>().ReverseMap();
+            CreateMap<UserToReturnDto, ApplicationUser>().ReverseMap();
+
+            CreateMap<RoleToRetrurnDto, IdentityRole>().ReverseMap();
         }
     }
 }

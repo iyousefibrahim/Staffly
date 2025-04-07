@@ -1,0 +1,21 @@
+﻿@model RoleToRetrurnDto
+@{
+    ViewData["Title"] = "Details";
+}
+<br />
+<br />
+<h1>Details Page</h1>
+<br />
+<br />
+
+<form>
+    <div class="mb-3">
+        <label asp-for="Name" class="form-label">Name</label>
+        <input readonly asp-for="Name" class="form-control" />
+    </div>
+
+    <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-outline-primary">Back</a>
+</form>
+
+

@@ -1,0 +1,44 @@
+﻿@model UserToReturnDto
+@{
+    ViewData["Title"] = "Details";
+}
+<br />
+<br />
+<h1>Details Page</h1>
+<br />
+<br />
+
+<form>
+    <div class="mb-3">
+        <label asp-for="UserName" class="form-label">Username</label>
+        <input readonly asp-for="UserName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="FirstName" class="form-label">First Name</label>
+        <input readonly asp-for="FirstName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="LastName" class="form-label">Last Name</label>
+        <input readonly asp-for="LastName" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email</label>
+        <input readonly asp-for="Email" class="form-control" />
+    </div>
+
+    @* <div class="mb-3"> *@
+    @*     <label asp-for="Roles" class="form-label">Roles</label> *@
+    @*     <select asp-for="Roles" asp-items=""> *@
+    @*         <option value="@null">-- Select Department --</option> *@
+    @*     </select> *@
+    @*     <span class="text-danger" asp-validation-for="Roles"></span> *@
+    @* </div> *@
+
+    <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-outline-primary">Back</a>
+</form>
+
+
